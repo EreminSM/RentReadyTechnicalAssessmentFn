@@ -15,6 +15,7 @@ using System.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
+using RentReadyTechnicalAssessmentFn.src.Logic;
 
 namespace RentReadyTechnicalAssessmentFn
 {
@@ -26,7 +27,13 @@ namespace RentReadyTechnicalAssessmentFn
             ILogger log)
         {
             try
-            {                
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                if (!new DatesRangeJSONValidator(requestBody).IsValid())
+                {
+                    return new BadRequestObjectResult("Invalid JSON body");
+                }
+
                 var service = new ServiceClient(Environment.GetEnvironmentVariable("CUSTOMCONNSTR_ConnectToDynamics365"));
                
                 if (service.IsReady)
@@ -72,40 +79,17 @@ namespace RentReadyTechnicalAssessmentFn
                     EntityCollection querySampleSolutionResults = service.RetrieveMultiple(queryCheckForSampleSolution);
 
 
-                    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
                     dynamic data = JsonConvert.DeserializeObject(requestBody);
 
-                    JSchema schema = JSchema.Parse(@"{
-  '$schema': 'http://json-schema.org/draft-04/schema#',
-  'type': 'object',
-  'properties': {
-    'StartOn': {
-      'type': 'string',
-      'format': 'date'
-    },
-    'EndOn': {
-      'type': 'string',
-      'format': 'date'
-    }
-  },
-  'required': [
-    'StartOn',
-    'EndOn'
-  ]
-}");
-
-                    JObject user = JObject.Parse(requestBody);
-
-                    bool valid = user.IsValid(schema);
-
-                    string responseMessage = $"Hello. This HTTP triggered function executed successfully." + requestBody + "valid ? " + (valid ? "true" : "false")
+                    string responseMessage = $"Hello. This HTTP triggered function executed successfully." + requestBody
                         + " retrieveAnswer: " + retrieveAnswer.Entities.Count.ToString();
 
                     return new OkObjectResult(responseMessage);
                 }
                 else
                 {
-                    return new OkObjectResult("Unable to connect to Dynamics 365");
+                    return new BadRequestObjectResult("Unable to connect to Dynamics 365");
                 }
             }
             catch (Exception ex)
