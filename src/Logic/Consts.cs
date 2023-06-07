@@ -20,7 +20,7 @@
     'EndOn'
   ]
 }";
-        public const int MSDYN_DURATION_HOURS = 10;
+        public const int MSDYN_DURATION_MINUTES = 1440;
         public const string DYNAMICS_365_CONNECTION_STRING_VARIABLE_NAME = "CUSTOMCONNSTR_ConnectToDynamics365";
     }    
 }

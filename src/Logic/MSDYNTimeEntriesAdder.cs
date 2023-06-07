@@ -11,7 +11,7 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
     internal class MSDYNTimeEntriesAdder
     {
         private const string MSDYN_ENTITY_NAME = "msdyn_timeentry";
-        private const string MSDYN_DATE_COLUMN = "msdyn_date";
+        private const string MSDYN_START_COLUMN = "msdyn_start";
         private const string MSDYN_DURATION_COLUMN = "msdyn_duration";
         public async Task<List<DateTime>> AddEntries(List<DateTime> dates)
         {
@@ -30,8 +30,8 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             foreach (var item in dates.Except(existedEntries).ToList())
             {
                 var entity = new Entity(MSDYN_ENTITY_NAME);
-                entity[MSDYN_DATE_COLUMN] = item;
-                entity[MSDYN_DURATION_COLUMN] = Consts.MSDYN_DURATION_HOURS;
+                entity[MSDYN_START_COLUMN] = item.Date;
+                entity[MSDYN_DURATION_COLUMN] = Consts.MSDYN_DURATION_MINUTES;
                 var task = service.CreateAsync(entity);
                 tasks.Add(task);
                 
@@ -47,12 +47,12 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             QueryExpression solutionQuery = new()
             {
                 EntityName = MSDYN_ENTITY_NAME,
-                ColumnSet = new ColumnSet(new string[] { MSDYN_DATE_COLUMN }),
+                ColumnSet = new ColumnSet(new string[] { MSDYN_START_COLUMN }),
                 Criteria =
                         {
                             Conditions =
                             {
-                                new ConditionExpression(MSDYN_DATE_COLUMN, ConditionOperator.In, dateValues)
+                                new ConditionExpression(MSDYN_START_COLUMN, ConditionOperator.In, dateValues)
                             }
                         }
             };
@@ -61,7 +61,7 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             var result = new List<DateTime>();
             foreach (var entity in retrieveAnswer.Entities)
             {
-                result.Add((DateTime)entity.Attributes[MSDYN_DATE_COLUMN]);
+                result.Add((DateTime)entity.Attributes[MSDYN_START_COLUMN]);
             }
 
             return result;
