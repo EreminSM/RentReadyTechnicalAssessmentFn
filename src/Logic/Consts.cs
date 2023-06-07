@@ -26,5 +26,6 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
     'EndOn'
   ]
 }";
-    }
+        public const int MSDYN_DURATION_HOURS = 10;
+    }    
 }
