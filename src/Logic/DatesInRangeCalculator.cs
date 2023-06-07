@@ -18,13 +18,13 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             var datesRange = JsonConvert.DeserializeObject<DatesRangeDto>(_json);
             var startDate = DateTime.Parse(datesRange.StartOn).Date;
             var endDate = DateTime.Parse(datesRange.EndOn).Date;
-            if (endDate < startDate)
+            if (endDate <= startDate)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("End date should be greater than start date");
             }
 
             var result = new List<DateTime>();
-            for (var day = startDate.Date; day <= endDate; day = day.AddDays(1))
+            for (var day = startDate.Date; day < endDate; day = day.AddDays(1))
             {
                 result.Add(day);
             }

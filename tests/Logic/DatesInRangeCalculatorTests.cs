@@ -30,7 +30,7 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
         }
 
         [Test]
-        public void GetDates_ReturnsExpectedDates_001()
+        public void GetDates_ThrowsAnExceptionWhenEndDateEqualsToStartDate()
         {
             var json = @"{
   ""StartOn"": ""2020-07-01"",
@@ -39,13 +39,12 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
             var expected = new List<DateTime>() { DateTime.Parse("2020-07-01") };
 
             DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
-            var actual = parser.GetDates();
 
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            Assert.Throws<ArgumentException>(() => parser.GetDates());
         }
 
         [Test]
-        public void GetDates_ReturnsExpectedDates_002()
+        public void GetDates_ReturnsExpectedDates_001()
         {
             var json = @"{
   ""StartOn"": ""2020-07-01"",
@@ -62,7 +61,6 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
                 DateTime.Parse("2020-07-07"),
                 DateTime.Parse("2020-07-08"),
                 DateTime.Parse("2020-07-09"),
-                DateTime.Parse("2020-07-10"),
             };
 
             DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
@@ -72,11 +70,11 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
         }
 
         [Test]
-        public void GetDates_ReturnsExpectedDates_003()
+        public void GetDates_ReturnsExpectedDates_002()
         {
             var json = @"{
   ""StartOn"": ""2020-02-28"",
-  ""EndOn"": ""2020-03-01""
+  ""EndOn"": ""2020-03-02""
 }";
             var expected = new List<DateTime>()
             {
