@@ -111,7 +111,7 @@ namespace RentReadyTechnicalAssessmentFn
             catch (Exception ex)
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                return new OkObjectResult(ex.Message + "\r\n" + ex.StackTrace+"\r\n"+ requestBody;
+                return new OkObjectResult(ex.Message + "\r\n" + ex.StackTrace+"\r\n"+ requestBody);
             }
         }
     }
