@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace RentReadyTechnicalAssessmentFn.src.Logic
 {
-    public class DatesRangeParser
+    public class DatesInRangeCalculator
     {
         private readonly string _json = "";
-        public DatesRangeParser(string json)
+        public DatesInRangeCalculator(string json)
         {
             _json = json;
         }
 
-        public List<DateTime> TryParse()
+        public List<DateTime> GetDates()
         {
             var datesRange = JsonConvert.DeserializeObject<DatesRangeDto>(_json);
             var startDate = DateTime.Parse(datesRange.StartOn).Date;

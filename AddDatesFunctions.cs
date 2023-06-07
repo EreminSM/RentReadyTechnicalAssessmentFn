@@ -27,7 +27,7 @@ namespace RentReadyTechnicalAssessmentFn
                     return new BadRequestObjectResult("Invalid JSON body");
                 }                
 
-                List<DateTime> dateValues = new DatesRangeParser(requestBody).TryParse();
+                List<DateTime> dateValues = new DatesInRangeCalculator(requestBody).GetDates();
 
                 var addedEntries = await new MSDYNTimeEntriesAdder().AddEntries(dateValues);
 

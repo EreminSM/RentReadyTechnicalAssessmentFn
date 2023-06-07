@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace RentReadyTechnicalAssessmentFn.tests.Logic
 {
     [TestFixture]
-    public class DatesRangeParserTests
+    public class DatesInRangeCalculatorTests
     {
         [SetUp]
         public void Setup()
@@ -17,20 +17,20 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
         }
 
         [Test]
-        public void TryParse_ThrowsAnExceptionWhenEndDateIsLessThanStartDate()
+        public void GetDates_ThrowsAnExceptionWhenEndDateIsLessThanStartDate()
         {
             var json = @"{
   ""StartOn"": ""2020-07-03"",
   ""EndOn"": ""2020-02-19""
 }";
 
-            DatesRangeParser parser = new DatesRangeParser(json);
+            DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
 
-            Assert.Throws<ArgumentException>(() => parser.TryParse());
+            Assert.Throws<ArgumentException>(() => parser.GetDates());
         }
 
         [Test]
-        public void TryParse_ReturnsExpectedDates_001()
+        public void GetDates_ReturnsExpectedDates_001()
         {
             var json = @"{
   ""StartOn"": ""2020-07-01"",
@@ -38,14 +38,14 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
 }";
             var expected = new List<DateTime>() { DateTime.Parse("2020-07-01") };
 
-            DatesRangeParser parser = new DatesRangeParser(json);
-            var actual = parser.TryParse();
+            DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
+            var actual = parser.GetDates();
 
             Assert.IsTrue(actual.SequenceEqual(expected));
         }
 
         [Test]
-        public void TryParse_ReturnsExpectedDates_002()
+        public void GetDates_ReturnsExpectedDates_002()
         {
             var json = @"{
   ""StartOn"": ""2020-07-01"",
@@ -65,14 +65,14 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
                 DateTime.Parse("2020-07-10"),
             };
 
-            DatesRangeParser parser = new DatesRangeParser(json);
-            var actual = parser.TryParse();
+            DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
+            var actual = parser.GetDates();
 
             Assert.IsTrue(actual.SequenceEqual(expected));
         }
 
         [Test]
-        public void TryParse_ReturnsExpectedDates_003()
+        public void GetDates_ReturnsExpectedDates_003()
         {
             var json = @"{
   ""StartOn"": ""2020-02-28"",
@@ -85,8 +85,8 @@ namespace RentReadyTechnicalAssessmentFn.tests.Logic
                 DateTime.Parse("2020-03-01"),
             };
 
-            DatesRangeParser parser = new DatesRangeParser(json);
-            var actual = parser.TryParse();
+            DatesInRangeCalculator parser = new DatesInRangeCalculator(json);
+            var actual = parser.GetDates();
 
             Assert.IsTrue(actual.SequenceEqual(expected));
         }
