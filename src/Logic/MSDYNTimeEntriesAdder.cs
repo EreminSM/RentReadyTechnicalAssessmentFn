@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace RentReadyTechnicalAssessmentFn.src.Logic
 {
-    internal class MSDYNTimeEntriesService
+    internal class MSDYNTimeEntriesAdder
     {
-        public MSDYNTimeEntriesService()
-        {
-
-        }
+        private const string MSDYN_ENTITY_NAME = "msdyn_timeentry";
+        private const string MSDYN_DATE_COLUMN = "msdyn_date";
+        private const string MSDYN_DURATION_COLUMN = "msdyn_duration";
         public async Task<List<DateTime>> AddEntries(List<DateTime> dates)
         {
-            var service = new ServiceClient(Environment.GetEnvironmentVariable("CUSTOMCONNSTR_ConnectToDynamics365"));
+            var service = new ServiceClient(Environment.GetEnvironmentVariable(Consts.DYNAMICS_365_CONNECTION_STRING_VARIABLE_NAME));
 
             if (!service.IsReady)
             {
@@ -30,9 +29,9 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             List<Task<Guid>> tasks = new();
             foreach (var item in dates.Except(existedEntries).ToList())
             {
-                var entity = new Entity("msdyn_timeentry");
-                entity["msdyn_date"] = item;
-                entity["msdyn_duration"] = Consts.MSDYN_DURATION_HOURS;
+                var entity = new Entity(MSDYN_ENTITY_NAME);
+                entity[MSDYN_DATE_COLUMN] = item;
+                entity[MSDYN_DURATION_COLUMN] = Consts.MSDYN_DURATION_HOURS;
                 var task = service.CreateAsync(entity);
                 tasks.Add(task);
                 
@@ -45,15 +44,15 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
 
         private static List<DateTime> GetAlreadyExistedEntries(ServiceClient service, List<DateTime> dateValues)
         {
-            QueryExpression solutionQuery = new QueryExpression
+            QueryExpression solutionQuery = new()
             {
-                EntityName = "msdyn_timeentry",
-                ColumnSet = new ColumnSet(new string[] { "msdyn_date", "msdyn_duration" }),
+                EntityName = MSDYN_ENTITY_NAME,
+                ColumnSet = new ColumnSet(new string[] { MSDYN_DATE_COLUMN }),
                 Criteria =
                         {
                             Conditions =
                             {
-                                new ConditionExpression("msdyn_date", ConditionOperator.In, dateValues)
+                                new ConditionExpression(MSDYN_DATE_COLUMN, ConditionOperator.In, dateValues)
                             }
                         }
             };
@@ -62,7 +61,7 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             var result = new List<DateTime>();
             foreach (var entity in retrieveAnswer.Entities)
             {
-                result.Add((DateTime)entity.Attributes["msdyn_date"]);
+                result.Add((DateTime)entity.Attributes[MSDYN_DATE_COLUMN]);
             }
 
             return result;

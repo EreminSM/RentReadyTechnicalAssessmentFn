@@ -29,7 +29,7 @@ namespace RentReadyTechnicalAssessmentFn
 
                 List<DateTime> dateValues = new DatesRangeParser(requestBody).TryParse();
 
-                var addedEntries = await new MSDYNTimeEntriesService().AddEntries(dateValues);
+                var addedEntries = await new MSDYNTimeEntriesAdder().AddEntries(dateValues);
 
                 string responseMessage = $"This HTTP triggered function executed successfully. Added entries count: {addedEntries.Count}";
                 log.LogInformation("C# HTTP trigger function processed a request.");
