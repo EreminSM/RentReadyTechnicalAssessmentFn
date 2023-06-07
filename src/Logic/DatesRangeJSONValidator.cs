@@ -12,6 +12,7 @@ namespace RentReadyTechnicalAssessmentFn.src.Logic
             _json = json;
         }
 
+        /// <summary>Checks if JSON schema provided at constructor is valid</summary>
         public bool IsValid()
         {
             try
