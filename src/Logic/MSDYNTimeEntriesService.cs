@@ -1,16 +1,14 @@
 ﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using RentReadyTechnicalAssessmentFn.src.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RentReadyTechnicalAssessmentFn.src.Logic
 {
-    internal class MSDYNTimeEntriesService : ITimeEntriesService
+    internal class MSDYNTimeEntriesService
     {
         public MSDYNTimeEntriesService()
         {
