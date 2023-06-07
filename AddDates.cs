@@ -26,16 +26,9 @@ namespace RentReadyTechnicalAssessmentFn
             ILogger log)
         {
             try
-            {
-                string _clientId = "<some client ID>";
-                string _clientSecret = "<some client Secret>";
-                string _environment = "<some environment>";
-
-                var _connectionString = @$"Url=https://{_environment}.dynamics.com;AuthType=ClientSecret;ClientId={_clientId}
-                ;ClientSecret={_clientSecret};RequireNewInstance=true";
-
-                var service = new ServiceClient(new Uri(@$"https://{_environment}.dynamics.com"), _clientId, _clientSecret, false);
-
+            {                
+                var service = new ServiceClient(Environment.GetEnvironmentVariable("CUSTOMCONNSTR_ConnectToDynamics365"));
+               
                 if (service.IsReady)
                 {
                     DateTime dateValue = DateTime.Now.Date;
@@ -118,7 +111,7 @@ namespace RentReadyTechnicalAssessmentFn
             catch (Exception ex)
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                return new OkObjectResult(ex.Message + "\r\n" + ex.StackTrace+"\r\n"+ requestBody);
+                return new OkObjectResult(ex.Message + "\r\n" + ex.StackTrace+"\r\n"+ requestBody;
             }
         }
     }
